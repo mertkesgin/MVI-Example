@@ -1,7 +1,8 @@
-package com.example.mertkesgin.mvi_example
+package com.example.mertkesgin.mvi_example.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.mertkesgin.mvi_example.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

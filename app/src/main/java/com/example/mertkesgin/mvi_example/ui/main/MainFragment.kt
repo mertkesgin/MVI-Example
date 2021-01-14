@@ -1,6 +1,7 @@
 package com.example.mertkesgin.mvi_example.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -38,10 +39,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
 
             viewState.characterList?.let {
-                println("DEBUG: DataState: init views ${it}")
+                Log.d("MainFragment","DataState: init views ${it}")
             }
             viewState.locationList?.let {
-                println("DEBUG: DataState: init views ${it}")
+                Log.d("MainFragment","DataState: init views ${it}")
             }
         })
     }

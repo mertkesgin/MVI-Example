@@ -15,6 +15,7 @@ sealed class ApiResponse<T> {
 
 
         fun <T> create(error: Throwable): ApiErrorResponse<T> {
+            Log.d(TAG,error.message!!)
             return ApiErrorResponse(error.message ?: "unknown error")
         }
 

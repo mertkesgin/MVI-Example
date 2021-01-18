@@ -29,11 +29,23 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     fun subscribeObservers(){
         viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
             println("DEBUG: DataState: ${dataState}")
-            dataState.characterList?.let { characterList ->
-                viewModel.setCharacterListData(characterList)
+
+            dataState.data?.let { mainViewState ->
+                mainViewState.characterList?.let {
+                    viewModel.setCharacterListData(it)
+                }
+
+                mainViewState.locationList?.let {
+                    viewModel.setLocationListData(it)
+                }
             }
-            dataState.locationList?.let { locationList ->
-                viewModel.setLocationListData(locationList)
+
+            dataState.loading.let {
+                Log.d("MainFragment","DEBUG: SHOW LOADING: ${it}")
+            }
+
+            dataState.message?.let {
+                Log.d("MainFragment","DEBUG: SHOW MESSAGE: ${it}")
             }
         })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->

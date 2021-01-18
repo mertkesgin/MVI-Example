@@ -8,29 +8,36 @@ import com.example.mertkesgin.mvi_example.ui.main.state.MainViewState
 import com.example.mertkesgin.mvi_example.utils.ApiEmptyResponse
 import com.example.mertkesgin.mvi_example.utils.ApiErrorResponse
 import com.example.mertkesgin.mvi_example.utils.ApiSuccessResponse
+import com.example.mertkesgin.mvi_example.utils.DataState
 
 class Repository {
 
-    fun getCharacters(): LiveData<MainViewState>{
+    fun getCharacters(): LiveData<DataState<MainViewState>>{
         return Transformations.switchMap(
                 RetrofitInstance()
                         .buildApi(ApiService::class.java)
                         .getCharacters()
         ){ apiResponse ->
-            object : LiveData<MainViewState>(){
+            object : LiveData<DataState<MainViewState>>(){
                 override fun onActive() {
                     super.onActive()
                     when(apiResponse){
                         is ApiSuccessResponse -> {
-                            value = MainViewState(
-                                    characterList =  apiResponse.body.results
+                            value = DataState.data(
+                                    data = MainViewState(
+                                            characterList = apiResponse.body.results
+                                    )
                             )
                         }
                         is ApiErrorResponse -> {
-                            value = MainViewState()
+                            value = DataState.error(
+                                    message = apiResponse.errorMessage
+                            )
                         }
                         is ApiEmptyResponse -> {
-                            value = MainViewState()
+                            value = DataState.error(
+                                    message = "Empty Response"
+                            )
                         }
                     }
                 }
@@ -38,26 +45,32 @@ class Repository {
         }
     }
 
-    fun getLocations(): LiveData<MainViewState>{
+    fun getLocations(): LiveData<DataState<MainViewState>>{
         return Transformations.switchMap(
                 RetrofitInstance()
                         .buildApi(ApiService::class.java)
                         .getLocations()
         ){ apiResponse ->
-            object : LiveData<MainViewState>(){
+            object : LiveData<DataState<MainViewState>>(){
                 override fun onActive() {
                     super.onActive()
                     when(apiResponse){
                         is ApiSuccessResponse -> {
-                            value = MainViewState(
-                                    locationList = apiResponse.body.results
+                            value = DataState.data(
+                                    data = MainViewState(
+                                            locationList = apiResponse.body.results
+                                    )
                             )
                         }
                         is ApiErrorResponse -> {
-                            value = MainViewState()
+                            value = DataState.error(
+                                    message = apiResponse.errorMessage
+                            )
                         }
                         is ApiEmptyResponse -> {
-                            value = MainViewState()
+                            value = DataState.error(
+                                    message = "Empty Response"
+                            )
                         }
                     }
                 }

@@ -11,6 +11,7 @@ import com.example.mertkesgin.mvi_example.ui.main.state.MainStateEvent
 import com.example.mertkesgin.mvi_example.ui.main.state.MainStateEvent.*
 import com.example.mertkesgin.mvi_example.ui.main.state.MainViewState
 import com.example.mertkesgin.mvi_example.utils.AbsentLiveData
+import com.example.mertkesgin.mvi_example.utils.DataState
 
 class MainViewModel : ViewModel() {
 
@@ -20,14 +21,14 @@ class MainViewModel : ViewModel() {
     private val _viewState: MutableLiveData<MainViewState> = MutableLiveData()
     val viewState: LiveData<MainViewState> get() = _viewState
 
-    val dataState: LiveData<MainViewState> = Transformations
+    val dataState: LiveData<DataState<MainViewState>> = Transformations
         .switchMap(_stateEvent){ stateEvent ->
             stateEvent?.let {
                 handleStateEvent(it)
             }
         }
 
-    fun handleStateEvent(stateEvent: MainStateEvent): LiveData<MainViewState>{
+    fun handleStateEvent(stateEvent: MainStateEvent): LiveData<DataState<MainViewState>>{
         when(stateEvent){
             is GetCharactersEvent -> {
                 return Repository().getCharacters()

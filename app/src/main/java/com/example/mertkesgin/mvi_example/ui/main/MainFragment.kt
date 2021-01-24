@@ -1,5 +1,6 @@
 package com.example.mertkesgin.mvi_example.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -13,13 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mertkesgin.mvi_example.R
 import com.example.mertkesgin.mvi_example.adapters.CharacterAdapter
 import com.example.mertkesgin.mvi_example.adapters.LocationAdapter
+import com.example.mertkesgin.mvi_example.ui.DataStateListener
 import com.example.mertkesgin.mvi_example.ui.main.state.MainStateEvent
 import kotlinx.android.synthetic.main.fragment_main.*
+import java.lang.ClassCastException
 import java.lang.Exception
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
     lateinit var viewModel: MainViewModel
+
+    lateinit var dataStateHandler: DataStateListener
+
     private val characterAdapter = CharacterAdapter()
     private val locationAdapter = LocationAdapter()
 
@@ -37,6 +43,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
             println("DEBUG: DataState: ${dataState}")
 
+            dataStateHandler.onDataStateChange(dataState)
+
             dataState.data?.let { mainViewState ->
                 mainViewState.characterList?.let {
                     viewModel.setCharacterListData(it)
@@ -45,14 +53,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 mainViewState.locationList?.let {
                     viewModel.setLocationListData(it)
                 }
-            }
-
-            dataState.loading.let {
-                Log.d("MainFragment","DEBUG: SHOW LOADING: ${it}")
-            }
-
-            dataState.message?.let {
-                Log.d("MainFragment","DEBUG: SHOW MESSAGE: ${it}")
             }
         })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
@@ -95,6 +95,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         rvLocations.apply {
             adapter = locationAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false)
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            dataStateHandler = context as DataStateListener
+        }catch (e: ClassCastException){
+            Log.d("MainFragment","${context} must implement DataStateListener")
         }
     }
 }

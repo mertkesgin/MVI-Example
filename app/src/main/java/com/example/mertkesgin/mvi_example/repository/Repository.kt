@@ -4,77 +4,52 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.mertkesgin.mvi_example.data.ApiService
 import com.example.mertkesgin.mvi_example.data.RetrofitInstance
+import com.example.mertkesgin.mvi_example.data.model.CharacterResponse
+import com.example.mertkesgin.mvi_example.data.model.LocationResponse
 import com.example.mertkesgin.mvi_example.ui.main.state.MainViewState
-import com.example.mertkesgin.mvi_example.utils.ApiEmptyResponse
-import com.example.mertkesgin.mvi_example.utils.ApiErrorResponse
-import com.example.mertkesgin.mvi_example.utils.ApiSuccessResponse
-import com.example.mertkesgin.mvi_example.utils.DataState
+import com.example.mertkesgin.mvi_example.utils.*
 
 class Repository {
 
     fun getCharacters(): LiveData<DataState<MainViewState>>{
-        return Transformations.switchMap(
-                RetrofitInstance()
+        return object : NetworkBoundResource<CharacterResponse,MainViewState>(){
+
+            override fun createApiCall(): LiveData<ApiResponse<CharacterResponse>> {
+                return RetrofitInstance()
                         .buildApi(ApiService::class.java)
                         .getCharacters()
-        ){ apiResponse ->
-            object : LiveData<DataState<MainViewState>>(){
-                override fun onActive() {
-                    super.onActive()
-                    when(apiResponse){
-                        is ApiSuccessResponse -> {
-                            value = DataState.data(
-                                    data = MainViewState(
-                                            characterList = apiResponse.body.results
-                                    )
-                            )
-                        }
-                        is ApiErrorResponse -> {
-                            value = DataState.error(
-                                    message = apiResponse.errorMessage
-                            )
-                        }
-                        is ApiEmptyResponse -> {
-                            value = DataState.error(
-                                    message = "Empty Response"
-                            )
-                        }
-                    }
-                }
             }
-        }
+
+            override fun handleApiSuccessResponse(response: ApiSuccessResponse<CharacterResponse>) {
+                result.value = DataState.data(
+                        null,
+                        data = MainViewState(
+                                characterList = response.body.results
+                        )
+                )
+            }
+
+        }.asLiveData()
     }
 
     fun getLocations(): LiveData<DataState<MainViewState>>{
-        return Transformations.switchMap(
-                RetrofitInstance()
+        return object : NetworkBoundResource<LocationResponse,MainViewState>(){
+
+            override fun createApiCall(): LiveData<ApiResponse<LocationResponse>> {
+                return RetrofitInstance()
                         .buildApi(ApiService::class.java)
                         .getLocations()
-        ){ apiResponse ->
-            object : LiveData<DataState<MainViewState>>(){
-                override fun onActive() {
-                    super.onActive()
-                    when(apiResponse){
-                        is ApiSuccessResponse -> {
-                            value = DataState.data(
-                                    data = MainViewState(
-                                            locationList = apiResponse.body.results
-                                    )
-                            )
-                        }
-                        is ApiErrorResponse -> {
-                            value = DataState.error(
-                                    message = apiResponse.errorMessage
-                            )
-                        }
-                        is ApiEmptyResponse -> {
-                            value = DataState.error(
-                                    message = "Empty Response"
-                            )
-                        }
-                    }
-                }
             }
-        }
+
+            override fun handleApiSuccessResponse(response: ApiSuccessResponse<LocationResponse>) {
+                result.value = DataState.data(
+                        null,
+                        data = MainViewState(
+                                locationList = response.body.results
+                        )
+                )
+            }
+
+        }.asLiveData()
     }
 }

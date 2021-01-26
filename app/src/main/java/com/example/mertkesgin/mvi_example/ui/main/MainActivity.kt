@@ -26,9 +26,13 @@ class MainActivity : AppCompatActivity(), DataStateListener {
     }
 
     private fun handleDataStateChange(dataState: DataState<*>?) {
-        dataState?.let { dataState ->
+        dataState?.let {
             showProgressBar(dataState.loading)
-            dataState.message?.let { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
+            dataState.message?.let { event ->
+                event.getContentIfNotHandled()?.let {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

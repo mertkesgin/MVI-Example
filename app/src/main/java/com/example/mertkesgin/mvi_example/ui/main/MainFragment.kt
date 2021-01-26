@@ -44,18 +44,20 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             println("DEBUG: DataState: ${dataState}")
 
             dataStateHandler.onDataStateChange(dataState)
-
             dataState.data?.let { mainViewState ->
-                mainViewState.characterList?.let {
-                    viewModel.setCharacterListData(it)
-                }
+                mainViewState.getContentIfNotHandled()?.let {
+                    it.characterList?.let {
+                        viewModel.setCharacterListData(it)
+                    }
 
-                mainViewState.locationList?.let {
-                    viewModel.setLocationListData(it)
+                    it.locationList?.let {
+                        viewModel.setLocationListData(it)
+                    }
                 }
             }
         })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+
 
             viewState.characterList?.let {
                 characterAdapter.differ.submitList(it)

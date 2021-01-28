@@ -1,7 +1,6 @@
 package com.example.mertkesgin.mvi_example.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.example.mertkesgin.mvi_example.data.ApiService
 import com.example.mertkesgin.mvi_example.data.RetrofitInstance
 import com.example.mertkesgin.mvi_example.data.model.CharacterResponse

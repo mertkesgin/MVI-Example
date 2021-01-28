@@ -1,9 +1,7 @@
 package com.example.mertkesgin.mvi_example.data
 
 import androidx.lifecycle.LiveData
-import com.example.mertkesgin.mvi_example.data.model.Character
 import com.example.mertkesgin.mvi_example.data.model.CharacterResponse
-import com.example.mertkesgin.mvi_example.data.model.Location
 import com.example.mertkesgin.mvi_example.data.model.LocationResponse
 import com.example.mertkesgin.mvi_example.utils.ApiResponse
 import retrofit2.http.GET

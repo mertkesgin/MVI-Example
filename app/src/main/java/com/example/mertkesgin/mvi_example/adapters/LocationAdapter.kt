@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mertkesgin.mvi_example.R
 import com.example.mertkesgin.mvi_example.data.model.Location
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_character.view.*
 import kotlinx.android.synthetic.main.item_location.view.*
 
 class LocationAdapter : RecyclerView.Adapter<LocationAdapter.LocationViewHolder>() {

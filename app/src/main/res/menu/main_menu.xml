@@ -7,6 +7,4 @@
     <item android:id="@+id/action_get_locations"
         android:title="Get Locations" />
 
-    <item android:id="@+id/action_get_episodes"
-        android:title="Get Episodes" />
 </menu>
